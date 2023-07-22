@@ -2,42 +2,87 @@
 import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
 import { Link } from '@inertiajs/vue3';
+import PrimaryButtonLink from "../../Components/PrimaryButtonLink.vue";
 
 defineProps({
     data: Array
 });
+
+function getRmaItemString(rma) {
+    if (!rma.item_identifiers) {
+        return '';
+    }
+
+    return rma.item_identifiers.map(item => {
+        return item.type;
+    }).join(', ');
+}
 </script>
 
 <template>
     <AppLayout>
         <Card class="py-12">
-            <p class="pb-4">Implement your RMA list here</p>
+            <div class="flex flex-row items-center mb-8">
+                <h1 class="font-bold mr-auto text-lg">
+                    RMAs
+                </h1>
+                <PrimaryButtonLink
+                    :href="route('rma.create')"
+                >
+                    Create RMA
+                </PrimaryButtonLink>
+            </div>
 
-            <p class="pb-4">
-                The list should be a data table or other logical way to represent all the
-                available data
+            <p v-if="!data || !data.length">
+                There are currently no RMAs
             </p>
 
-            <p class="pb-4">Each item in the list should have the following:</p>
+            <div
+                v-else
+                class="border overflow-x-auto rounded"
+            >
+                <table class="table-auto w-full">
+                    <thead class="text-left">
+                        <tr class="border-b-2">
+                            <th class="px-6 py-4">Created By</th>
+                            <th class="px-6 py-4">Created At</th>
+                            <th class="px-6 py-4">Items</th>
+                            <th class="px-6 py-4"></th>
+                        </tr>
+                    </thead>
 
-            <ul class="pb-4" style="list-style-type: circle">
-                <li>Text displaying who created the RMA</li>
-                <li>The date and time that the RMA was created</li>
-                <li>A single string representing the items found on the RMA</li>
-                <li>A link to visit the RMA's more detailed information page (<code>rma.show</code>)</li>
-            </ul>
+                    <tbody>
+                        <tr
+                            v-for="(rma, row) in data"
+                            :key="rma.id"
+                            class="border-b transition duration-300 ease-in-out hover:bg-neutral-200"
+                            :class="{
+                                'bg-neutral-100': row % 2 === 1
+                            }"
+                        >
+                            <td class="px-6 py-4">{{ rma.created_by }}</td>
+                            <td class="px-6 py-4">{{ rma.created_at }}</td>
+                            <td class="px-6 py-4">{{ getRmaItemString(rma) }}</td>
+                            <td class="px-6 py-4">
+                                <Link :href="route('rma.show', rma.id)">
+                                    View
+                                </Link>
+                            </td>
+                        </tr>
+                    </tbody>
 
-            <p class="pb-4">
-                Make sure to check the <code>RMAController</code> and <code>RMAInListResource</code> classes
-                to see what's already been implemented
-            </p>
-
-            <p class="pb-4">There should also be a button somewhere on the page to create a new RMA.
-                This should take you to the <code>rma.create</code> route</p>
-
-            <p>
-                <Link :href="route('rma.create')">Click to Visit Create RMA Page</Link>
-            </p>
+                    <tfoot>
+                        <tr class="border-t-2">
+                            <td
+                                class="font-semibold px-6 py-2"
+                                colspan="4"
+                            >
+                                Total: {{ data.length}}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </Card>
     </AppLayout>
 </template>

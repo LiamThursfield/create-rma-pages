@@ -3,6 +3,7 @@
 namespace App\Models\RMA;
 
 use App\Http\Requests\CreateRMARequest;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,7 +44,7 @@ class RMA extends Model
      */
     public function user(): BelongsTo
     {
-        //todo return the user that created this RMA
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -53,6 +54,6 @@ class RMA extends Model
      */
     public function items(): HasMany
     {
-        //todo return the items that belong to this RMA
+        return $this->hasMany(RMAItem::class, 'rma_id');
     }
 }

@@ -33,7 +33,7 @@ class RMAItem extends Model
      */
     public function rma(): BelongsTo
     {
-        //todo implement rma relationship
+        return $this->belongsTo(RMA::class);
     }
 
     /**
@@ -41,6 +41,7 @@ class RMAItem extends Model
      */
     public function getValue(): BaseIdentifiableEnum
     {
-        //todo get the correct enum instance from the type/value combination
+        $type = RMA_TYPE::fromValue($this->type);
+        return new ($type->getAssociatedEnumClass())($this->value);
     }
 }

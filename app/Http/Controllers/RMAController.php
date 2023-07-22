@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RMAQueryAction;
 use App\Http\Requests\CreateRMARequest;
 use App\Http\Resources\RMAInListResource;
 use App\Http\Resources\RMAResource;
@@ -22,8 +23,10 @@ class RMAController extends Controller
      */
     public function index(Request $request): Response
     {
-        //todo get resources
-        $resources = RMAInListResource::collection([])->toArray($request);
+
+        $resources = RMAInListResource::collection(
+            app(RMAQueryAction::class)->handle($request->all())
+        )->toArray($request);
 
         return Inertia::render('RMA/RMAList', ['data' => $resources]);
     }

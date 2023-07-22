@@ -23,6 +23,7 @@ class RMAInListResource extends JsonResource
         return [
             'created_by' => $this->user->name,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'id' => $this->id,
             'item_identifiers' => $this->items->map(fn(RMAItem $item) => [
                 'type' => $item->type->description,
                 'identifier' => $item->identifier
