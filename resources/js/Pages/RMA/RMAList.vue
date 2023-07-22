@@ -8,7 +8,7 @@ defineProps({
     data: Array
 });
 
-function getRmaItemString(rma) {
+const getRmaItemString = (rma) => {
     if (!rma.item_identifiers) {
         return '';
     }
