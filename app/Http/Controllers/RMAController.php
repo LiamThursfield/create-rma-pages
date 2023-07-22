@@ -68,9 +68,9 @@ class RMAController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function show($rma, Request $request): Response
+    public function show(RMA $rma, Request $request): Response
     {
-        //todo select the correct page component
-        return Inertia::render('', RMAResource::make($rma)->toArray($request));
+        $rma->load(['items', 'user']);
+        return Inertia::render('RMA/ViewRMA', RMAResource::make($rma)->toArray($request));
     }
 }
