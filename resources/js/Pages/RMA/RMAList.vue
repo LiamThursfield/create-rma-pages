@@ -63,7 +63,7 @@ function getRmaItemString(rma) {
                             <td class="px-6 py-4">{{ rma.created_by }}</td>
                             <td class="px-6 py-4">{{ rma.created_at }}</td>
                             <td class="px-6 py-4">{{ getRmaItemString(rma) }}</td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 text-right">
                                 <Link :href="route('rma.show', rma.id)">
                                     View
                                 </Link>
