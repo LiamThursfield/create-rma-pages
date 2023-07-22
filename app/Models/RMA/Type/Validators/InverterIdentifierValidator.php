@@ -20,14 +20,23 @@ class InverterIdentifierValidator implements ValidatesIdentifiers
             $errors[] = 'The identifier must be 10 characters long';
         }
 
+        $types_hybrid = [
+            INVERTER::_5_KW_HYBRID,
+        ];
+
+        $types_coupled = [
+            INVERTER::_3_KW_AC_COUPLED,
+            INVERTER::_3_6_KW_AC_COUPLED
+        ];
+
         //if the type is a hybrid inverter, the identifier must start with characters 'SA' or 'SD'
-        if (in_array($type->value, INVERTER::TYPES_HYBRID)) {
+        if (in_array($type->value, $types_hybrid)) {
             if (!in_array(substr($identifier, 0, 2), ['SA', 'SD'])) {
                 $errors[] = 'The identifier must start with characters \'SA\' or \'SD\'';
             }
         }
         //if the type is an AC coupled inverter, the identifier must start with characters 'CE'
-        else if (in_array($type->value, INVERTER::TYPES_AC_COUPLED)) {
+        else if (in_array($type->value, $types_coupled)) {
             if (!str_starts_with($identifier, 'CE')) {
                 $errors[] = 'The identifier must start with characters \'CE\'';
             }

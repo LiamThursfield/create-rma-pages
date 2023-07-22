@@ -11,15 +11,6 @@ class INVERTER extends BaseIdentifiableEnum
     public const _3_6_KW_AC_COUPLED = 'giv-ac-3.6';
     public const _5_KW_HYBRID = 'giv-hy-5.0';
 
-    public const TYPES_AC_COUPLED = [
-        self::_3_KW_AC_COUPLED,
-        self::_3_6_KW_AC_COUPLED,
-    ];
-
-    public const TYPES_HYBRID = [
-        self::_5_KW_HYBRID,
-    ];
-
     /**
      * @return ValidatesIdentifiers
      */
