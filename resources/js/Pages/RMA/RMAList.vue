@@ -3,9 +3,11 @@ import AppLayout from "../../Layouts/AppLayout.vue";
 import Card from "../../Components/Card.vue";
 import { Link } from '@inertiajs/vue3';
 import PrimaryButtonLink from "../../Components/PrimaryButtonLink.vue";
+import BannerCustom from "../../Components/BannerCustom.vue";
 
 defineProps({
-    data: Array
+    data: Array,
+    status: String,
 });
 
 const getRmaItemString = (rma) => {
@@ -21,6 +23,12 @@ const getRmaItemString = (rma) => {
 
 <template>
     <AppLayout>
+        <BannerCustom
+            v-if="status"
+            :style="'success'"
+            :message="status"
+        />
+
         <Card class="py-12">
             <div class="flex flex-row items-center mb-8">
                 <h1 class="font-bold mr-auto text-lg">
