@@ -4,8 +4,11 @@ namespace App\Http\Requests;
 
 use App\Models\RMA\RMAItemData;
 use App\Models\RMA\Type\RMA_TYPE;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use BenSampo\Enum\Rules\EnumValue;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -20,13 +23,26 @@ class CreateRMARequest extends FormRequest
      */
     public function rules()
     {
-        //todo finish validation rules
         return [
             'items' => ['required', 'array'],
             'items.*.type' => ['required', new EnumValue(RMA_TYPE::class)],
-            'items.*.value' => ['required'],
-            'items.*.identifier' => ['required'],
-            'items.*.reason' => ['required'],
+            'items.*.value' => [
+                'required',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    try {
+                        $rma_type = RMA_TYPE::fromValue($this[str_replace('value', 'type', $attribute)]);
+
+                        $allowed_values = $rma_type->getAssociatedInstanceMembers()->toArray();
+                        if (!in_array($value, $allowed_values)) {
+                            $fail("The {$attribute} must be one of: " . Arr::join($allowed_values, ', ') . ".");
+                        }
+                    } catch (InvalidEnumMemberException) {
+                        $fail("The {$attribute} is invalid.");
+                    }
+                },
+            ],
+            'items.*.identifier' => ['required', 'string'],
+            'items.*.reason' => ['required', 'string'],
         ];
     }
 

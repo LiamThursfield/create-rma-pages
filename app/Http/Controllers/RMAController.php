@@ -38,12 +38,11 @@ class RMAController extends Controller
     {
         return Inertia::render('RMA/CreateRMA', [
             'types' => RMA_TYPE::getCollection()->map(fn(RMA_TYPE $type) => [
-                //todo assign correct values for text and value
-//                'text' => ,
-//                'value' => ,
+                'text' => $type->description,
+                'value' => $type->value,
                 'items' => $type->getAssociatedInstanceMembers()->map(fn(BaseIdentifiableEnum $member) => [
-//                    'text' => ,
-//                    'value' =>
+                    'text' => $member->description,
+                    'value' => $member->value,
                 ])->toArray()
             ])->toArray()
         ]);
@@ -56,9 +55,8 @@ class RMAController extends Controller
      */
     public function store(CreateRMARequest $request): RedirectResponse
     {
-        //todo validate the identifier
-
-        //todo create the RMA
+        $request->checkIdentifierValidation();
+        RMA::createFromRequest($request);
 
         return redirect(route('rma.index'))->with('status', 'RMA Created Successfully');
     }

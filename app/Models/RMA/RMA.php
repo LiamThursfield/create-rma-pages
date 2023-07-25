@@ -25,12 +25,12 @@ class RMA extends Model
     public static function createFromRequest(CreateRMARequest $request): RMA
     {
         return DB::transaction(function () use ($request) {
-            //todo create the RMA
-//            $rma =
+            $rma = RMA::create([
+                'user_id' => $request->user()->id
+            ]);
 
-            //todo create RMA items from the request data
             foreach ($request->getItems() as $data) {
-
+                RMAItem::createFromData($rma, $data);
             }
 
             return $rma;

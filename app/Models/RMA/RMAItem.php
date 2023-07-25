@@ -14,6 +14,8 @@ class RMAItem extends Model
 
     protected $table = 'rma_items';
 
+    protected $guarded = ['id'];
+
     protected $casts = [
         'type' => RMA_TYPE::class
     ];
@@ -25,7 +27,19 @@ class RMAItem extends Model
      */
     public static function createFromData(RMA $rma, RMAItemData $data): static
     {
-        //todo implement creation of RMAItem from data
+        return $rma->items()->create([
+            'identifier' => $data->identifier,
+            'type' => $data->type,
+            'value' => $data->value,
+            'reason' => $data->reason ?? null,
+        ]);
+        return static::create([
+            'rma_id' => $rma->id,
+            'identifier' => $data->identifier,
+            'type' => $data->type,
+            'value' => $data->value,
+            'reason' => $data->reason ?? null,
+        ]);
     }
 
     /**
